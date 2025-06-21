@@ -3,7 +3,7 @@
 <p align="center">
 ---
 </p>
-  <img src="#" alt="inception" height="150" width="150">
+  <img src="https://github.com/deryaxacar/42-Ft_irc/blob/main/irc-logo.png" alt="irc" height="150" width="150">
 </div>
 
 
