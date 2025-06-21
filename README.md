@@ -258,7 +258,6 @@ ft_irc/
 │
 ├── Makefile
 ├── README.md
-└── irc-logo.png
 ```
 
 ---
