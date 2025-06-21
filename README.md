@@ -273,12 +273,3 @@ ft_irc/
 ```
 
 ---
-
-## Future Improvements 🚀
-
-* TLS/SSL encryption (via `OpenSSL`)
-* IRCv3 support (extended capabilities, metadata)
-* NickServ / ChanServ support
-* Operator authentication (`OPER` command)
-* Rate limiting & flood protection
-* WebSocket adapter for browser clients
