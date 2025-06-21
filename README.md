@@ -244,18 +244,30 @@ All socket operations are wrapped in exception-safe logic. Disconnected clients 
 ```
 ft_irc/
 │
-├── src/
-│   ├── main.cpp
-│   ├── Server.cpp / Server.hpp
-│   ├── Client.cpp / Client.hpp
-│   ├── CommandHandler.cpp / CommandHandler.hpp
-│   └── Channel.cpp / Channel.hpp
+├── Commands/
+│   ├── Invite.cpp / Invite.hpp
+│   ├── Join.cpp / Join.hpp
+│   ├── Kick.cpp / Kick.hpp
+│   ├── Mode.cpp / Mode.hpp
+│   ├── Nick.cpp / Nick.hpp
+│   ├── Part.cpp / Part.hpp
+│   ├── Pass.cpp / Pass.hpp
+│   ├── Privmsg.cpp / Privmsg.hpp
+│   ├── Quit.cpp / Quit.hpp
+│   ├── Topic.cpp / Topic.hpp
+│   └── User.cpp / User.hpp
 │
-├── include/
-│   ├── IRCDefines.hpp
-│   ├── ResponseCodes.hpp
-│   └── Utils.hpp
+├── Modes/
+│   ├── Invite.cpp / Invite.hpp
+│   ├── Key.cpp / Key.hpp
+│   ├── Limit.cpp / Limit.hpp
+│   ├── Modes.cpp / Modes.hpp
+│   ├── Op.cpp / Op.hpp
+│   └── Topic.cpp / Topic.hpp
 │
+├── Commands.cpp / Commands.hpp
+├── Server.cpp / Server.hpp
+├── main.cpp
 ├── Makefile
 ├── README.md
 ```
