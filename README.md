@@ -204,6 +204,16 @@ The following commands are implemented in compliance with the IRC protocol (RFC 
 
 ## Testing the Server 🔍
 
+**Netcat:**
+Netcat (nc) is a lightweight, command-line based networking tool used for testing network connections, transferring data, and listening on ports. It can act as both a client and a server.
+
+🔧 What is it used for?
+
+  - Establishing TCP or UDP connections
+  - Listening on a port (acting like a server)
+  - Transferring files
+  - Sending and receiving data over sockets to test network applications
+
 ### 🧪 Netcat Example
 
 ```bash
