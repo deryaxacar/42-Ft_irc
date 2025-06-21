@@ -12,14 +12,14 @@ The ft_irc project aims to help students gain proficiency in network programming
 
 * [What is an Endpoint?](#what-is-an-endpoint)
 * [What is a Socket?](#what-is-a-socket)
-* [Network and Communication Fundamentals](#1-network-and-communication-fundamentals)
-* [Concurrency and Scalability](#2-concurrency-and-scalability)
-* [Application Architecture and Logic](#3-application-architecture-and-logic)
-* [Supported IRC Commands](#4-supported-irc-commands)
-* [Testing the Server](#5-testing-the-server)
-* [Error Handling Strategy](#6-error-handling-strategy)
-* [Project Structure](#7-project-structure)
-* [Future Improvements](#8-future-improvements)
+* [Network and Communication Fundamentals](#network-and-communication-fundamentals)
+* [Concurrency and Scalability](#concurrency-and-scalability)
+* [Application Architecture and Logic](#application-architecture-and-logic)
+* [Supported IRC Commands](#supported-irc-commands)
+* [Testing the Server](#testing-the-server)
+* [Error Handling Strategy](#error-handling-strategy)
+* [Project Structure](#project-structure)
+* [Future Improvements](#future-improvements)
 
 ---
 
