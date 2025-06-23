@@ -255,31 +255,29 @@ All socket operations are wrapped in exception-safe logic. Disconnected clients 
 ft_irc/
 │
 ├── Commands/
-│   ├── Invite.cpp / Invite.hpp
-│   ├── Join.cpp / Join.hpp
-│   ├── Kick.cpp / Kick.hpp
-│   ├── Mode.cpp / Mode.hpp
-│   ├── Nick.cpp / Nick.hpp
-│   ├── Part.cpp / Part.hpp
-│   ├── Pass.cpp / Pass.hpp
-│   ├── Privmsg.cpp / Privmsg.hpp
-│   ├── Quit.cpp / Quit.hpp
-│   ├── Topic.cpp / Topic.hpp
+│   ├── Invite.cpp / Invite.hpp    # Invite user
+│   ├── Join.cpp / Join.hpp        # Join channel
+│   ├── Kick.cpp / Kick.hpp        # Kick user
+│   ├── Mode.cpp / Mode.hpp        # Channel modes
+│   ├── Nick.cpp / Nick.hpp        # Nickname operations
+│   ├── Part.cpp / Part.hpp        # Leave channel
+│   ├── Pass.cpp / Pass.hpp        # Password authentication
+│   ├── Privmsg.cpp / Privmsg.hpp  # Send message
+│   ├── Quit.cpp / Quit.hpp        # Disconnect from serve
+│   ├── Topic.cpp / Topic.hpp      # Channel topic
 │   └── User.cpp / User.hpp
 │
 ├── Modes/
-│   ├── Invite.cpp / Invite.hpp
-│   ├── Key.cpp / Key.hpp
-│   ├── Limit.cpp / Limit.hpp
-│   ├── Modes.cpp / Modes.hpp
-│   ├── Op.cpp / Op.hpp
-│   └── Topic.cpp / Topic.hpp
-│
-├── Commands.cpp / Commands.hpp
-├── Server.cpp / Server.hpp
-├── main.cpp
-├── Makefile
-├── README.md
+│   ├── Invite.cpp / Invite.hpp    # +i mode (invite-only)
+│   ├── Key.cpp / Key.hpp          # +k mode (password-protected)
+│   ├── Limit.cpp / Limit.hpp      # +l mode (user limit)
+│   ├── Modes.cpp / Modes.hpp      # Main mode handler
+│   ├── Op.cpp / Op.hpp            # +o mode (channel operator)
+│   └── Topic.cpp / Topic.hpp      # +t mode (topic restrictions)r
+├── main.cpp              # Main entry point
+├── Server.cpp/hpp        # Core server class
+└── Commands.cpp/hpp      # Command handler
+
 ```
 
 ---
