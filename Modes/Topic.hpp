@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Mode.hpp                                           :+:      :+:    :+:   */
+/*   Topic.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakman <arcemirhanakman@gmail.com>         +#+  +:+       +#+        */
+/*   By: ndogan <ndogan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 04:19:06 by eakman            #+#    #+#             */
-/*   Updated: 2025/04/15 04:19:06 by eakman           ###   ########.fr       */
+/*   Created: 2025/06/24 15:48:17 by ndogan            #+#    #+#             */
+/*   Updated: 2025/06/24 15:48:17 by ndogan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MODE_HPP
-# define MODE_HPP
+#ifndef TOPIC_LOCK_MODE_HPP
+# define TOPIC_LOCK_MODE_HPP
 
 # include "../Server.hpp"
-# include <sstream>
 
-namespace Commands {
-    void modeCommand(Server& server, int client_fd, std::istringstream& iss);
+namespace Modes {
+    void setTopicLock(Server& server, int client_fd, const std::string& channel, bool enable);
 }
 
 #endif

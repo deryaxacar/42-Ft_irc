@@ -156,7 +156,7 @@ void Server::receiveMessage(int client_fd)
     if (bytes_received <= 0) {
         removeClient(client_fd); // İstemci bağlantısı kesilir ve listeden çıkarılır
     }
-    } else {
+    else {
         // Partial data handling
         clientBuffers[client_fd] += std::string(buffer, bytes_received);
 

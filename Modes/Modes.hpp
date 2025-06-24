@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Modes.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakman <arcemirhanakman@gmail.com>         +#+  +:+       +#+        */
+/*   By: ndogan <ndogan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 16:54:32 by eakman            #+#    #+#             */
-/*   Updated: 2025/03/24 16:54:32 by eakman           ###   ########.fr       */
+/*   Created: 2025/06/24 15:51:10 by ndogan            #+#    #+#             */
+/*   Updated: 2025/06/24 15:51:10 by ndogan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MODES_HPP
-#define MODES_HPP
+#pragma once
 
 #include "../Server.hpp"
 #include <string>
@@ -27,6 +26,4 @@ namespace Modes {
     void processMode(Server& server, int client_fd, const std::string& channel, const std::string& modes, std::vector<std::string>& params);
     void getChannelModes(Server& server, int client_fd, const std::string& channel); 
 }
-
-#endif
 

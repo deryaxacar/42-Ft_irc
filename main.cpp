@@ -26,10 +26,10 @@ int main(int argc, char* argv[]) {
     // string’ini long türüne dönüştürür çünkü string ile port dinlenmez.
     // 10 → onluk (decimal) sayı sisteminde çözümlemesini söyler
     // endPtr → dönüşüm sonrası kalan karakteri gösterir (örneğin "6667abc" olursa 'a')
-    long port = strtol(argv[1], &endptr, 10);
+    long port = strtol(argv[1], &endPtr, 10);
     
     // Port geçerlilik kontrolü en yüksek kullanılabilir port 65535
-    if (errno != 0 || *endptr != '\0' || port <= 0 || port > 65535) {
+    if (errno != 0 || *endPtr != '\0' || port <= 0 || port > 65535) {
         std::cerr << "❌ Error: Invalid port number. Port must be between 1 and 65535." << std::endl;
         return EXIT_FAILURE;
     }

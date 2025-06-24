@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Invite.hpp                                         :+:      :+:    :+:   */
+/*   Key.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakman <arcemirhanakman@gmail.com>         +#+  +:+       +#+        */
+/*   By: ndogan <ndogan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 04:20:37 by eakman            #+#    #+#             */
-/*   Updated: 2025/04/15 04:20:37 by eakman           ###   ########.fr       */
+/*   Created: 2025/06/24 15:48:44 by ndogan            #+#    #+#             */
+/*   Updated: 2025/06/24 15:48:44 by ndogan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INVITE_MODE_HPP
-# define INVITE_MODE_HPP
+#pragma once
 
 # include "../Server.hpp"
+# include <string>
 
 namespace Modes {
-    void setInviteOnly(Server& server, int client_fd, const std::string& channel, bool enable);
+    void setKey(Server& server, int client_fd, const std::string& channel, const std::string& key);
 }
-
-#endif

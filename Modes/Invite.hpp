@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Limit.hpp                                          :+:      :+:    :+:   */
+/*   Invite.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eakman <arcemirhanakman@gmail.com>         +#+  +:+       +#+        */
+/*   By: ndogan <ndogan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 04:25:33 by eakman            #+#    #+#             */
-/*   Updated: 2025/04/15 04:25:33 by eakman           ###   ########.fr       */
+/*   Created: 2025/06/24 15:47:41 by ndogan            #+#    #+#             */
+/*   Updated: 2025/06/24 15:47:41 by ndogan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIMIT_MODE_HPP
-# define LIMIT_MODE_HPP
+#ifndef INVITE_MODE_HPP
+# define INVITE_MODE_HPP
 
 # include "../Server.hpp"
 
 namespace Modes {
-    void setLimit(Server& server, int client_fd, const std::string& channel, int limit);
+    void setInviteOnly(Server& server, int client_fd, const std::string& channel, bool enable);
 }
 
 #endif
