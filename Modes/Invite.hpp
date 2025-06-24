@@ -10,13 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INVITE_MODE_HPP
-# define INVITE_MODE_HPP
+#pragma once
 
 # include "../Server.hpp"
 
 namespace Modes {
     void setInviteOnly(Server& server, int client_fd, const std::string& channel, bool enable);
 }
-
-#endif
