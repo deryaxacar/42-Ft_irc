@@ -26,7 +26,13 @@ namespace Commands {
             return;
         }
     
-        if (channel.empty() || channel[0] != '#') {
+        if (channel.empty()) {
+            std::string error_msg = ":ft_irc 461 MODE :Not enough parameters\r\n";
+            send(client_fd, error_msg.c_str(), error_msg.size(), 0);
+            return;
+        }
+
+        if (channel[0] != '#') {
             std::string error_msg = ":ft_irc 403 " + channel + " :No such channel\r\n";
             send(client_fd, error_msg.c_str(), error_msg.size(), 0);
             return;

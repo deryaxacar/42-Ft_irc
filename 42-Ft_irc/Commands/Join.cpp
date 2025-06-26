@@ -96,8 +96,13 @@ namespace Commands
             server.sendToChannel(channel, server.getNicknames()[client_fd], userMsg, client_fd, true);
         }
         std::cout << "📨 User joins: " << channel << " channel\n";
-        send(client_fd, joinMsg.c_str(), joinMsg.size(), 0);
+        //send(client_fd, joinMsg.c_str(), joinMsg.size(), 0);
 
+        for (std::set<int>::iterator it = server.getChannels()[channel].begin(); it != server.getChannels()[channel].end(); ++it)
+        {
+            send(*it, joinMsg.c_str(), joinMsg.size(), 0);
+        }
+        
         if (!server.getChannelTopics()[channel].empty())
         {
             std::string topicMsg = ":ft_irc 332 " + server.getNicknames()[client_fd] + " " + channel + " :" + server.getChannelTopics()[channel] + "\r\n";
