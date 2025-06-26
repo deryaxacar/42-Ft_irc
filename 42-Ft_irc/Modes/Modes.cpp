@@ -44,6 +44,7 @@ void Modes::processMode(Server &server, int client_fd, const std::string &channe
 
     std::string &currentModes = server.getChannelModes()[channel];
     bool enable = true;
+    bool unknow = false;
     size_t paramIndex = 0;
 
     for (size_t i = 0; i < modes.size(); ++i)
@@ -67,43 +68,48 @@ void Modes::processMode(Server &server, int client_fd, const std::string &channe
 
         switch (mode)
         {
-        case 'i':
-            setInviteOnly(server, client_fd, channel, enable);
-            break;
-        case 'k':
-            setKey(server, client_fd, channel, enable ? paramToken : "");
-            break;
-        case 'l':
-            if (enable)
-            {
-                char *endptr;
-                long limit = std::strtol(paramToken.c_str(), &endptr, 10);
-                if (*endptr != '\0' || limit <= 0)
+            case 'i':
+                setInviteOnly(server, client_fd, channel, enable);
+                break;
+            case 'k':
+                setKey(server, client_fd, channel, enable ? paramToken : "");
+                break;
+            case 'l':
+                if (enable)
                 {
-                    std::string msg = ":ft_irc 461 MODE " + channel + " +l :Invalid limit\r\n";
-                    send(client_fd, msg.c_str(), msg.size(), 0);
-                    continue;
+                    char *endptr;
+                    long limit = std::strtol(paramToken.c_str(), &endptr, 10);
+                    if (*endptr != '\0' || limit <= 0)
+                    {
+                        std::string msg = ":ft_irc 461 MODE " + channel + " +l :Invalid limit\r\n";
+                        send(client_fd, msg.c_str(), msg.size(), 0);
+                        continue;
+                    }
+                    setLimit(server, client_fd, channel, static_cast<int>(limit));
                 }
-                setLimit(server, client_fd, channel, static_cast<int>(limit));
-            }
-            else
-                setLimit(server, client_fd, channel, 0);
-            break;
-        case 'o':
-            setOperator(server, client_fd, channel, paramToken, enable);
-            break;
-        case 't':
-            setTopicLock(server, client_fd, channel, enable);
-            break;
-        default:
-            std::string msg = ":ft_irc 472 " + channel + " " + mode + " :Unknown mode\r\n";
-            send(client_fd, msg.c_str(), msg.size(), 0);
-            break;
+                else
+                    setLimit(server, client_fd, channel, 0);
+                break;
+            case 'o':
+                setOperator(server, client_fd, channel, paramToken, enable);
+                break;
+            case 't':
+                setTopicLock(server, client_fd, channel, enable);
+                break;
+            default:
+                std::string msg = ":ft_irc 472 MODE " + channel + " " + mode + " :is unknown mode char to me\r\n";
+                unknow = true;
+                send(client_fd, msg.c_str(), msg.size(), 0);
+                break;
         }
+
+        if (unknow)
+            break;
+        
 
         if (enable)
         {
-            if (currentModes.find(mode) != std::string::npos)
+            if (currentModes.find(mode) == std::string::npos)
                 currentModes += mode;
         }
         else
@@ -113,10 +119,6 @@ void Modes::processMode(Server &server, int client_fd, const std::string &channe
                 currentModes.erase(pos, 1);
         }
     }
-
-    std::string updatedModes = currentModes.empty() ? "+No modes set" : "+" + currentModes;
-    std::string notify = ":ft_irc 324 " + channel + " " + updatedModes + "\r\n";
-    send(client_fd, notify.c_str(), notify.size(), 0);
 }
 
 
@@ -131,6 +133,6 @@ void Modes::getChannelModes(Server &server, int client_fd, const std::string &ch
     }
 
     std::string modes = server.getChannelModes()[channel];
-    std::string response = ":ft_irc 324 " + channel + " Waiting... " + modes + "\r\n";
+    std::string response = ":ft_irc 324 " + server.getNicknames()[client_fd] + " " + channel + " +" + modes + "\r\n";
     send(client_fd, response.c_str(), response.size(), 0);
 }

@@ -19,10 +19,10 @@ namespace Modes
 
     void setKey(Server &server, int client_fd, const std::string &channel, const std::string &key)
     {
-
+        std::string nick = server.getNicknames()[client_fd];
         if (server.getChannelOperators()[channel].find(client_fd) == server.getChannelOperators()[channel].end())
         {
-            std::string error_msg = ":ft_irc 482 " + channel + " :You're not channel operator\r\n";
+            std::string error_msg = ":ft_irc 482 " + nick + " " + channel + " :You're not channel operator\r\n";
             send(client_fd, error_msg.c_str(), error_msg.size(), 0);
             return;
         }
@@ -41,7 +41,7 @@ namespace Modes
         }
         if (key == server.getChannelKeys()[channel])
         {
-            std::string error_msg = ":ft_irc 461 MODE " + channel + " +k :Key already set\r\n";
+            std::string error_msg = ":ft_irc 467 MODE " + nick + " " + channel + " +k :Key already set\r\n";
             send(client_fd, error_msg.c_str(), error_msg.size(), 0);
             return;
         }
@@ -53,7 +53,7 @@ namespace Modes
             send(client_fd, response.c_str(), response.size(), 0);
             return;
         }
-        if (server.getChannelModes()[channel].find('k') != std::string::npos)
+        if (server.getChannelModes()[channel].find('k') == std::string::npos)
             server.getChannelModes()[channel] += 'k';
         server.getChannelKeys()[channel] = key;
 
