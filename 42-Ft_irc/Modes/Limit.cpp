@@ -18,7 +18,7 @@
 namespace Modes
 {
 
-    void setLimit(Server &server, int client_fd, const std::string &channel, int limit)
+    void setLimit(Server &server, int client_fd, const std::string &channel, int limit, bool enable)
     {
         std::string nick = server.getNicknames()[client_fd];
 
@@ -29,17 +29,20 @@ namespace Modes
             return;
         }
 
-        if (limit <= 0)
+        if (limit <= 0 && enable)
         {
             std::string error_msg = ":ft_irc 461 " + nick + " " + channel + " :Limit parameter missing or invalid\r\n";
             send(client_fd, error_msg.c_str(), error_msg.size(), 0);
             return;
         }
 
-        if (limit == 0)
+        if (limit == 0 && !enable)
         {
-            server.getChannelLimits().erase(channel);
-            server.getChannelModes()[channel].erase(server.getChannelModes()[channel].find('l'));
+            if (server.getChannelLimits()[channel])
+            {
+                server.getChannelLimits().erase(channel);
+                server.getChannelModes()[channel].erase(server.getChannelModes()[channel].find('l'));
+            }
             std::string response = ":ft_irc MODE " + channel + " -l\r\n";
             server.sendToChannel(channel, "server", response, client_fd, true);
             send(client_fd, response.c_str(), response.size(), 0);

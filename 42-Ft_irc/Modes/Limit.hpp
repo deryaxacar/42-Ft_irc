@@ -16,5 +16,5 @@
 
 namespace Modes
 {
-    void setLimit(Server &server, int client_fd, const std::string &channel, int limit);
+    void setLimit(Server &server, int client_fd, const std::string &channel, int limit, bool enable);
 }

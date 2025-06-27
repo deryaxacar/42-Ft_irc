@@ -42,6 +42,6 @@ namespace Modes {
 
         std::string response = ":ft_irc MODE " + channel + (enable ? " +i" : " -i") + "\r\n";
         send(client_fd, response.c_str(), response.size(), 0);
-    }
+    } 
 
 }

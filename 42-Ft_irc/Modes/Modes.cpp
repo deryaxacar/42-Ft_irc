@@ -55,7 +55,7 @@ void Modes::processMode(Server &server, int client_fd, const std::string &channe
         std::string paramToken;
         bool needsParam = (mode == 'k' || mode == 'l' || mode == 'o');
 
-        if (needsParam)
+        if (needsParam && enable)
         {
             if (paramIndex >= params.size())
             {
@@ -85,10 +85,10 @@ void Modes::processMode(Server &server, int client_fd, const std::string &channe
                         send(client_fd, msg.c_str(), msg.size(), 0);
                         continue;
                     }
-                    setLimit(server, client_fd, channel, static_cast<int>(limit));
+                    setLimit(server, client_fd, channel, static_cast<int>(limit), enable);
                 }
                 else
-                    setLimit(server, client_fd, channel, 0);
+                    setLimit(server, client_fd, channel, 0, enable);
                 break;
             case 'o':
                 setOperator(server, client_fd, channel, paramToken, enable);
@@ -118,6 +118,10 @@ void Modes::processMode(Server &server, int client_fd, const std::string &channe
             if (pos != std::string::npos)
                 currentModes.erase(pos, 1);
         }
+
+        std::string updatedModes = currentModes.empty() ? "+No modes set" : "+" + currentModes;
+        std::string notify = ":ft_irc 324 " + channel + " " + updatedModes + "\r\n";
+        send(client_fd, notify.c_str(), notify.size(), 0);
     }
 }
 
