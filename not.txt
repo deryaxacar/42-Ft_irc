@@ -1,0 +1,224 @@
+projeyi çalıştırmak için 1024 ten büyük bir port girmen gerekiyor nedeni 
+Port 0–1023 arası sistem tarafından özel izinli (privileged) olarak kabul edilir.
+Bu portları sadece root (veya sudo) yetkisi olan işlemler kullanabilir.
+
+./ircserv <port> <password>
+
+farklı terminal açıyoruz ve şu komutla bağlanıyoruz
+
+nc -C 127.0.0.1 <port>
+
+---
+
+1. Netcat (nc)
+IRC sunucuna test bağlantısı kurmak için kullanılır.
+
+Çoğu Linux sistemde nc kurulu gelir.
+
+Eğer yoksa, Ubuntu/Debian’da şunu kurman gerekir:
+sudo apt update
+sudo apt install netcat-openbsd
+
+---
+HexChat
+
+HexChat	sudo apt install hexchat
+
+---
+
+isAuthorized(client_fd): authorizedClients → Yetkilendirilmiş istemcilerin file descriptor'larını tutan bir 			veri yapısıdır. Bu genellikle bir std::set<int> olur.
+Eğer fd bulunuyorsa, find(fd) sonucu end()'e eşit değildir → true
+Eğer fd bulunamıyorsa, find(fd) sonucu end()'e eşittir → false
+std::set<std::string>: Alfabetik olarak sıralanmış, tekrar etmeyen std::string elemanlarını tutan bir veri yapısı.
+
+---
+
+Commands kısmı:
+
+PASS -> Bağlantı için şifre doğrulama komutu 
+1- kullanıcı kayıtlımı kontrolü
+2- girilen şifre doğru mu kontrolü
+3- herhangi bir sorun yoksa yeni kullanıcı oluştur.
+
+kullanımı : PASS <password>
+örn: /pass deneme
+
+---
+
+NICK -> Kullanıcı takma adı belirleme komutu
+1- kullanıcı kayıtlımı kontrolü
+2- kullanıcının girdiği nickname boş mu kontrolü
+3- Sunucudaki tüm istemciler içinde aynı nickname kullanılıyor mu kontrolü
+4- bunlar değilse nickname i client fd ye verir ve mesajı yazdırır.
+
+kullanımı : NICK <username>
+örn: /nick <deryacar>
+
+---
+
+USER -> Kullanıcının kimlik bilgilerini (username, realname) sunucuya tanıtmak.
+1- kullanıcı kayıtlımı kontrolü
+2- paremetrelerden herhangi biri boş mu kontrolü
+3- :<realname> in başında : var mı kontrolü
+4- daha sonra substr ile realname in başından itibaren alıyoruz ve işlem başarılı ekrana basıyoruz.
+
+kullanımı : USER <username> <mode> <unused> :<realname>
+örn: /user mert 0 * :Mertcan Çakır
+
+not: 
+Bu yapı sabit ve zorunludur, çünkü IRC sunucuları bu formatı bekler
+mode: Bir zamanlar kullanıcı yetkilerini göstermek içindi (örneğin bot mu, operatör mü). Artık bu işlev başka komutlara kaydı.
+
+unused: Eskiden bazı sunucular için anlamlıydı ama evrensel bir anlam kazanmadı. RFC'de silinmediği için "zorunlu ama anlamı olmayan" parametre haline geldi.
+
+mode Artık kullanılmıyor ama RFC gereği zorunlu
+unused Anlamı yok ama pozisyonu doldurmak zorunlu
+
+"Kullanılmasa da yazmak zorundayız çünkü protokol böyle istiyor."
+Tıpkı bir formda “İkinci telefon numarası (opsiyonel değil)” alanı gibi.
+
+---
+
+JOIN -> kanala girme komutu.
+1- kullanıcı kayıtlımı kontrolü
+2- kullanıcının nicknamei mevcutmu kontrolü
+3- kanal adı boşsa yada '#' ile başlamıyorsa kontrolü
+4- eğer kanal sunucuda kayıtlı değilse, yeni kanal oluşturuluyor
+5- kanal davetli modundaysa ve kullanıcı davet edilmemişse hata ver
+6- eğer kanal bir şifreye (key) sahipse ve girilen key yanlışsa reddet
+7- Kanalda kullanıcı sınırı varsa ve dolmuşsa hata ver
+8- Tüm kontrolleri geçen kullanıcıyı mevcut kanala ekle
+9- Katılım mesajı hazırla (JOIN mesajı), bu mesaj tüm kanala gönderilecek
+10- kullanıcının nickname'i boş değilse, bir karşılama mesajı hazırla
+11- kanalın bir konusu (topic) varsa, yeni gelen kullanıcıya gösterilir
+12- bu yeni bir kanal ise, kullanıcıya operatör yetkisi (+o) verilir
+
+kullanım: /join #kanal
+
+---
+
+PART -> Kanaldan ayrılma komutu
+1- kullanıcı kayıtlımı kontrolü
+2- kanal mevcut mu kontrolü
+3- o kullanıcı kanalda mı kontrolü
+4- Eğer kullanıcı kanalın kurucusuysa ve çıkıyorsa.
+	1- Eğer başka operatör varsa, onu yeni kurucu yap
+	2- Kanalda başka operatör kalmadıysa, kurucu kaydı silinir
+5- Kullanıcıdan ayrılma mesajı (diğer üyelere gidecek)
+6- Kullanıcı kanaldan çıkarılır
+7- Kullanıcıya özel olarak PART mesajı gönderilir
+8- Eğer kanalda kimse kalmadıysa, kanal sistemden tamamen silinir
+
+kullanım: /part #kanal
+
+---
+
+QUIT -> kullanıcının sunucudan tamamen çıkmasını sağlar
+1- kullanıcı bir sebep girdiyse, başındaki boşlukları temizle
+2- Eğer sebep boşsa varsayılan mesaj kullanılır
+3- Kullanıcının içinde bulunduğu tüm kanalları döngüyle gez
+	1- Kullanıcı bu kanalın bir üyesi mi?
+	2- Kanal üyelerine gönderilecek QUIT mesajı hazırla
+4- Eğer kanalda kullanıcı kalmadıysa, kanalı sil
+5- Kullanıcı bağlantısını sunucudan tamamen kaldır
+
+kullanım: /quit
+
+---
+
+MODE -> Kanal modlarını değiştirme komutu
+1- kullanıcı kayıtlımı kontrolü
+2- Kanal adı verilmemişse hata dön
+3- Kanal ismi `#` ile başlamıyorsa geçersiz kabul edilir
+4- Kanal sunucuda kayıtlı değilse hata dön
+5- Kullanıcı kanalda değilse işlem yapmasına izin verme
+6- Eğer modeStr (örn. +i, -o) verilmemişse, mevcut modları göster
+7- Ekstra parametreleri topla (örn: +k için şifre, +o için kullanıcı vb.)
+8- Asıl mod işleme fonksiyonu çağrılır (+/- modlar burada uygulanır)
+
+kullanım:
+
+/MODE #genel            → Mevcut modları göster.
+/MODE #genel +i         → Kanalı sadece davetli yapılır.
+/MODE #genel -i         → Kanalı sadece davetli yapılır.
+/MODE #genel +k <key>   → Kanal şifresi belirlenir.
+/MODE #genel -k <key>   → Şifre kaldırılır.
+/MODE #genel +o <username> → kanala operatör ekliyor.
+/MODE #genel +o <username> → kanala operatör ekliyor.
+/MODE #genel +l <limit> → kanala kişi limiti koyuyor.
+/MODE #genel +l <limit> → kanaldaki kişi limitini kaldırıyor.
+/MODE #genel +t <topic> → kanala konu ekliyor.
+/MODE #genel +t <topic> → kanaldaki konuyu çıkartıyor.
+
+---
+
+KICK -> Kanal dışına kullanıcı atma komutu
+1- kullanıcı kayıtlımı kontrolü
+2- Eğer kanal veya hedef kullanıcı parametresi eksikse, komut hatalıdır
+3- Parametrelerden hangisi kanal, hangisi kullanıcı belirlenir
+4- Belirtilen kanal mevcutmu bakılır.
+5- Kullanıcı, kanalda değilse işlem yapamaz
+6- Kullanıcı operatör değilse başka bir kullanıcıyı atamaz
+7- Atılmak istenen kullanıcının file descriptor'ını al
+8- Kanal kurucusu (founder) sadece kendini atabilir, başkası tarafından atılamaz
+9- Kullanıcı kendisini atmaya çalışıyorsa hata ver
+10- KICK mesajı: tüm kanal üyelerine hedef kullanıcının atıldığını bildir
+11- Hedef kullanıcı kanal listesinden ve operatör listesinden çıkarılır
+12- Kanal boş kaldıysa, kanal ve ilişkili tüm verileri temizle
+
+kullanım: /kick der #kanal
+
+---
+
+TOPIC -> kanalın konusunu belirler
+1- kullanıcı kayıtlımı kontrolü
+2- Eğer kanal veya hedef kullanıcı parametresi eksikse, komut hatalıdır
+3- Eğer belirtilen kanal sunucudaki kanal listesinde var mı kontrolü
+4- Kullanıcı o kanaldamı kontrolü
+5- Başlangıçta boşluk, tab, satır sonu gibi karakterleri kaldır
+6- Eğer konu belirtilmemişse veya ':' karakteri ile başlamıyorsa (sadece konu görüntüleme isteği)
+7- Kanal için konu ayarlanmamışsa gönderilecek IRC mesajı
+8- Eğer kanal 't' (topic lock) modundaysa ve kullanıcı operatör değilse konu değiştiremez
+9- Kanalın konusunu sunucu üzerindeki veri yapısında güncelle
+10- Kanalda bulunan tüm kullanıcıları temsil eden FD'lerin listesini al ve yeni konu mesajını gönder
+
+kullanım: /topic #kanal :deneme
+
+---
+
+INVITE -> Kanal daveti gönderir
+1- Kullanıcı kayıtlı mı kontrolü yapılır
+2- Eğer hedef kullanıcı veya kanal parametresi eksikse komut hatalıdır
+3- Kanal adı geçerli mi kontrolü (başında # olmalı)
+4- Belirtilen kanal sunucuda mevcut mu kontrol edilir
+5- Kullanıcı bu kanalın üyesi mi kontrol edilir
+6- Kullanıcı kanal operatörü mü kontrol edilir
+7- Hedef kullanıcı sunucuda var mı kontrol edilir
+8- Hedef kullanıcı zaten kanalda mı kontrol edilir
+9- Davet sunucuda ilgili listeye eklenir
+10- Davet mesajı hedef kullanıcıya gönderilir
+11- Komutu gönderen kullanıcıya başarı mesajı (341) gönderilir
+
+kullanım: /invite der
+
+---
+
+PRIVMSG -> Özel veya kanal mesajı gönderir
+1- Kullanıcı kayıtlı mı kontrolü yapılır
+2- Mesaj kısmı boş veya sadece boşluk karakterlerinden mi oluşuyor kontrolü yapılır
+3- Mesaj başındaki boşlukları ve : karakterini temizle
+4- Hedef (nick veya kanal) parametresi boş mu kontrol edilir
+5- Hedef bir kanal ise (# ile başlıyorsa):
+	1- Kanal mevcut mu kontrol edilir
+	2- Kullanıcı kanal üyesi mi kontrol edilir
+	3- Mesaj kanaldaki tüm kullanıcılara gönderilir (gönderen hariç)
+6- Hedef bir kullanıcı (nick) ise:
+	1- Nick'e ait FD bulunur
+	2- Mesaj doğrudan kullanıcıya gönderilir
+
+kullanım: 
+/privmsg #genel :Merhaba herkese!
+/privmsg Derya :Selam, müsait misin?
+
+---
+
